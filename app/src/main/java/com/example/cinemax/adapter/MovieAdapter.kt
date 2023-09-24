@@ -1,13 +1,17 @@
 package com.example.cinemax.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.size.Scale
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.cinemax.MovieDetails
 import com.example.cinemax.R
 import com.example.cinemax.databinding.CustomMovieBinding
 import com.example.cinemax.models.Movie
@@ -18,25 +22,28 @@ class MovieAdapter(private val context: Context) : RecyclerView.Adapter<MovieAda
 
     class MovieViewHolder(private val itemBinding: CustomMovieBinding):
         RecyclerView.ViewHolder(itemBinding.root){
-        fun bind(movie:MovieEntity){
-            itemBinding.movieTitle.text = movie.title
-            itemBinding.movieRating.text  = movie.rating.toString()
+            fun bind(movie:MovieEntity){
+                itemBinding.movieTitle.text = movie.title
+                itemBinding.movieRating.text = movie.popularity.toString()
+                itemBinding.movieReleaseDate.text = movie.release_date
 
-            val posterURL = "https://image.tmdb.org/t/p/w500/"+movie.poster_Path
+                val posterURL = "https://image.tmdb.org/t/p/w342/"+movie.poster_path
 
-            Glide.with(itemBinding.imageViewMovie.context)
-                .load(posterURL)
-                .into(itemBinding.imageViewMovie)
+//                Glide.with(itemView).load(posterURL).into(itemBinding.imageViewMovie)
+                itemBinding.imageViewMovie.load(posterURL){
+                    crossfade(true)
+                    placeholder(R.drawable.placeholder)
+                    scale(Scale.FILL)
+                }
 
-
+            }
         }
-        }
+
 
     private val differCallback = object : DiffUtil.ItemCallback<MovieEntity>(){
         override fun areItemsTheSame(oldItem:MovieEntity, newItem: MovieEntity): Boolean {
             return oldItem.id == newItem.id &&
-                    oldItem.title == newItem.title &&
-                    oldItem.rating == newItem.rating
+                    oldItem.title == newItem.title
         }
 
         override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
@@ -57,6 +64,20 @@ class MovieAdapter(private val context: Context) : RecyclerView.Adapter<MovieAda
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val currentMovie = differ.currentList[position]
         holder.bind(currentMovie)
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, MovieDetails::class.java)
+            intent.putExtra("thumbnail", currentMovie.poster_path)
+            intent.putExtra("id", currentMovie.id)
+            intent.putExtra("title", currentMovie.title)
+            intent.putExtra("release_date", currentMovie.release_date)
+            intent.putExtra("language", currentMovie.original_language)
+            intent.putExtra("overview", currentMovie.overview)
+            intent.putExtra("votes", currentMovie.vote_count)
+            intent.putExtra("popularity", currentMovie.popularity)
+            context.startActivity(intent)
+        }
+
     }
 
     override fun getItemCount(): Int {
