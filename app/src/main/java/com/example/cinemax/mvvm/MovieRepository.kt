@@ -9,4 +9,6 @@ class MovieRepository( private val movieDatabase: MovieDatabase ) {
 
     fun getRoomMovies() = movieDatabase.getMovieDAO().getAllMovies()
 
+    fun searchMovie(query: String?) = movieDatabase.getMovieDAO().searchMovie(query)
+
 }

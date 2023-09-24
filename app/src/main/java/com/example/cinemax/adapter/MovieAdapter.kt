@@ -1,6 +1,7 @@
 package com.example.cinemax.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -10,6 +11,7 @@ import coil.load
 import coil.size.Scale
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.example.cinemax.MovieDetails
 import com.example.cinemax.R
 import com.example.cinemax.databinding.CustomMovieBinding
 import com.example.cinemax.models.Movie
@@ -62,6 +64,18 @@ class MovieAdapter(private val context: Context) : RecyclerView.Adapter<MovieAda
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val currentMovie = differ.currentList[position]
         holder.bind(currentMovie)
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, MovieDetails::class.java)
+            intent.putExtra("id", currentMovie.id)
+            intent.putExtra("title", currentMovie.title)
+            intent.putExtra("release_date", currentMovie.release_date)
+            intent.putExtra("language", currentMovie.original_language)
+            intent.putExtra("overview", currentMovie.overview)
+            intent.putExtra("votes", currentMovie.vote_count)
+            intent.putExtra("popularity", currentMovie.popularity)
+            context.startActivity(intent)
+        }
 
     }
 

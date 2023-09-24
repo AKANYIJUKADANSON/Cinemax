@@ -30,6 +30,8 @@ class RemoteViewModel( private val repository: MovieRepository, private val movi
      // Get movies from the database
     fun getRoomMovies() = repository.getRoomMovies()
 
+    fun searchMovie(query : String?) =repository.searchMovie(query)
+
 
     fun getPopularMovies(page: Int) {
         val client = movieAPI.getPopularMovies(Constants.API_KEY, page)

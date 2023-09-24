@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -48,6 +49,21 @@ class MainActivity : AppCompatActivity() {
         initMovieViewModel()
 
         setUpRecyclerView()
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                if (p0 != null){
+                    searchMovie(p0)
+                }
+                return true
+            }
+
+        })
     }
 
     private fun setUpRecyclerView() {
@@ -76,6 +92,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun initMovieViewModel(){
         movieViewModel.getPopularMovies(1)
+    }
+
+    private fun searchMovie(query: String?){
+        val searchQuery = "%$query%"
+        movieViewModel.searchMovie(searchQuery).observe(
+            this,
+            {list -> movieAdapter.differ.submitList(list)}
+        )
     }
 
 
