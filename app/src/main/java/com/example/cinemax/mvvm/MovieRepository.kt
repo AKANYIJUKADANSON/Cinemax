@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.cinemax.MainActivity
 import com.example.cinemax.models.Movie
-import com.example.cinemax.models.MovieResponse
 import com.example.cinemax.retrofit.MovieAPIService
 import com.example.cinemax.roomdb.MovieDAO
 import com.example.cinemax.roomdb.MovieDatabase
@@ -23,32 +22,12 @@ class MovieRepository(
     private val movieDatabase: MovieDatabase
     ) {
 
-    fun getRoomMovies() = movieDatabase.getMovieDAO().getAllMovies()
-
     suspend fun insertMovieToDatabase(movieToInsert:MovieEntity) = movieDatabase.getMovieDAO().insertMovies(movieToInsert)
+
+    fun getRoomMovies() = movieDatabase.getMovieDAO().getAllMovies()
 
 
     // Getting the movies from API using retrofit
-    fun getPopularMovies(page: Int) {
-        val client = movieAPI.getPopularMovies(Constants.API_KEY, page)
-        client.enqueue(object : Callback<MovieResponse> {
-            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
-                if (response.isSuccessful) {
-
-                    // Insert whatever we get from api into the database
-                    response.body()?.movies?.forEach {
-                        suspend { insertMovieToDatabase(it) }
-
-                    }
-                    Log.e("List Of MOVIES From API", response.body()!!.movies.toString())
-                }
-            }
-
-            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
-                Log.e("Error while getting movies from API", t.message.toString())
-            }
-
-        })
-    }
+//    fun getPopulars() =
 
 }

@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.cinemax.adapter.MovieAdapter
 import com.example.cinemax.databinding.ActivityMainBinding
+import com.example.cinemax.models.Movie
 import com.example.cinemax.mvvm.*
 import com.example.cinemax.retrofit.MovieAPIService
 import com.example.cinemax.retrofit.RetrofitInstance
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding:ActivityMainBinding
     private lateinit var movieViewModel: RemoteViewModel
     private val movieAdapter by lazy{MovieAdapter(this)}
+
     private val movieAPI:MovieAPIService by lazy {
         RetrofitInstance.getRetrofitInstance
     }
@@ -40,12 +42,12 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         val movieRepository = MovieRepository(movieAPI, movieDao, movieDatabase)
-        val factory = MovieViewModelFactory(movieRepository)
+        val factory = MovieViewModelFactory(movieRepository, movieAPI)
         movieViewModel =  ViewModelProvider(this, factory)[RemoteViewModel::class.java]
 
-        setUpRecyclerView()
         initMovieViewModel()
 
+        setUpRecyclerView()
     }
 
     private fun setUpRecyclerView() {
@@ -61,13 +63,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        movieViewModel.getRoomMovies()
+        val yy = movieViewModel.getRoomMovies()
+        Log.e("Room yyyyyy", "$yy")
         this.let {
             lifecycleScope.launch {
-                movieViewModel.getRoomMovies().observe(it,
-                    {movies->
+                movieViewModel.getRoomMovies().observe(this@MainActivity,
+                    {movies ->
                         movieAdapter.differ.submitList(movies)
-                        Log.e("Movies----------->", "$movies")
+                        Log.e("Room movies", "$movies")
                     })
             }
         }
@@ -76,11 +79,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initMovieViewModel(){
-        movieViewModel.getRoomMovies().observe(this,
-            Observer<List<MovieEntity>>  {})
-
-        movieViewModel.getPopularMovies()
+        movieViewModel.getPopularMovies(1)
+//        movieViewModel.getRoomMovies().observe(this,
+//            Observer<List<MovieEntity>>  {})
     }
+
+//    fun myMovie(movie: Movie){
+//        movieToInsert = MovieEntity(
+//            movie.id, movie.title,movie.overview,
+////            movie.poster_Path,
+////            movie.backdrop_Path,
+////            movie.rating, movie.release_Date
+//        )
+//    }
 
 
 }

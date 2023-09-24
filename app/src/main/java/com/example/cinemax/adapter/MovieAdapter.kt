@@ -20,13 +20,13 @@ class MovieAdapter(private val context: Context) : RecyclerView.Adapter<MovieAda
         RecyclerView.ViewHolder(itemBinding.root){
         fun bind(movie:MovieEntity){
             itemBinding.movieTitle.text = movie.title
-            itemBinding.movieRating.text  = movie.rating.toString()
+//            itemBinding.movieRating.text  = movie.rating.toString()
 
-            val posterURL = "https://image.tmdb.org/t/p/w500/"+movie.poster_Path
+//            val posterURL = "https://image.tmdb.org/t/p/w500/"+movie.poster_Path
 
-            Glide.with(itemBinding.imageViewMovie.context)
-                .load(posterURL)
-                .into(itemBinding.imageViewMovie)
+//            Glide.with(itemBinding.imageViewMovie.context)
+//                .load(posterURL)
+//                .into(itemBinding.imageViewMovie)
 
 
         }
@@ -35,8 +35,8 @@ class MovieAdapter(private val context: Context) : RecyclerView.Adapter<MovieAda
     private val differCallback = object : DiffUtil.ItemCallback<MovieEntity>(){
         override fun areItemsTheSame(oldItem:MovieEntity, newItem: MovieEntity): Boolean {
             return oldItem.id == newItem.id &&
-                    oldItem.title == newItem.title &&
-                    oldItem.rating == newItem.rating
+                    oldItem.title == newItem.title
+//                    && oldItem.rating == newItem.rating
         }
 
         override fun areContentsTheSame(oldItem: MovieEntity, newItem: MovieEntity): Boolean {
