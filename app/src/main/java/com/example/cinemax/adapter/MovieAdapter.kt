@@ -20,14 +20,14 @@ class MovieAdapter(private val context: Context) : RecyclerView.Adapter<MovieAda
         RecyclerView.ViewHolder(itemBinding.root){
         fun bind(movie:MovieEntity){
             itemBinding.movieTitle.text = movie.title
-//            itemBinding.movieRating.text  = movie.rating.toString()
+            itemBinding.movieRating.text = movie.popularity.toString()
+            itemBinding.movieReleaseDate.text = movie.release_date
 
-//            val posterURL = "https://image.tmdb.org/t/p/w500/"+movie.poster_Path
+            val posterURL = "https://image.tmdb.org/t/p/w500/"+movie.poster_path
 
-//            Glide.with(itemBinding.imageViewMovie.context)
-//                .load(posterURL)
-//                .into(itemBinding.imageViewMovie)
-
+            Glide.with(itemBinding.imageViewMovie.context)
+                .load(posterURL)
+                .into(itemBinding.imageViewMovie)
 
         }
         }

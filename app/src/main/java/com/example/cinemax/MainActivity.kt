@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val movieRepository = MovieRepository(movieAPI, movieDao, movieDatabase)
+        val movieRepository = MovieRepository(movieDatabase)
         val factory = MovieViewModelFactory(movieRepository, movieAPI)
         movieViewModel =  ViewModelProvider(this, factory)[RemoteViewModel::class.java]
 
@@ -63,8 +63,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val yy = movieViewModel.getRoomMovies()
-        Log.e("Room yyyyyy", "$yy")
         this.let {
             lifecycleScope.launch {
                 movieViewModel.getRoomMovies().observe(this@MainActivity,
@@ -74,24 +72,11 @@ class MainActivity : AppCompatActivity() {
                     })
             }
         }
-
-
     }
 
     private fun initMovieViewModel(){
         movieViewModel.getPopularMovies(1)
-//        movieViewModel.getRoomMovies().observe(this,
-//            Observer<List<MovieEntity>>  {})
     }
-
-//    fun myMovie(movie: Movie){
-//        movieToInsert = MovieEntity(
-//            movie.id, movie.title,movie.overview,
-////            movie.poster_Path,
-////            movie.backdrop_Path,
-////            movie.rating, movie.release_Date
-//        )
-//    }
 
 
 }
