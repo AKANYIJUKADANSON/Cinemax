@@ -9,6 +9,28 @@
         android:layout_height="wrap_content"
         tools:context=".MainActivity">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/movies_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/appColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="fill"
+                android:paddingEnd="0dp"
+                android:text="Popular Movies"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteX="16dp" />
+
+        </androidx.appcompat.widget.Toolbar>
+
         <SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
@@ -19,14 +41,13 @@
             android:background="@drawable/search_view_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/movies_toolbar" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/movie_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="584dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchView" />

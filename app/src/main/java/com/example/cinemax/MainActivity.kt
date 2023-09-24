@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -46,10 +47,15 @@ class MainActivity : AppCompatActivity() {
         val factory = MovieViewModelFactory(movieRepository, movieAPI)
         movieViewModel =  ViewModelProvider(this, factory)[RemoteViewModel::class.java]
 
+        // Setting up the tool bar
+        setUpActionBar()
+
         initMovieViewModel()
 
+        // Setting up the recycler view
         setUpRecyclerView()
 
+        // Implementing the search option
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
 
             override fun onQueryTextSubmit(p0: String?): Boolean {
@@ -64,6 +70,19 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    // Tool bar
+    private fun setUpActionBar(){
+        val myToolBar = binding.moviesToolbar
+        setSupportActionBar(myToolBar)
+        val actionBar = supportActionBar
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_back_arrow)
+        }
+
+        myToolBar.setNavigationOnClickListener { onBackPressed() }
     }
 
     private fun setUpRecyclerView() {
@@ -84,7 +103,6 @@ class MainActivity : AppCompatActivity() {
                 movieViewModel.getRoomMovies().observe(this@MainActivity,
                     {movies ->
                         movieAdapter.differ.submitList(movies)
-                        Log.e("Room movies", "$movies")
                     })
             }
         }

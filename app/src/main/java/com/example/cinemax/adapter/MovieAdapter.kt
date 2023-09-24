@@ -67,6 +67,7 @@ class MovieAdapter(private val context: Context) : RecyclerView.Adapter<MovieAda
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, MovieDetails::class.java)
+            intent.putExtra("thumbnail", currentMovie.poster_path)
             intent.putExtra("id", currentMovie.id)
             intent.putExtra("title", currentMovie.title)
             intent.putExtra("release_date", currentMovie.release_date)
